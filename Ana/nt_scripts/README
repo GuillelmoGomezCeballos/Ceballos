@@ -1,0 +1,6 @@
+* make link to the data (/data)/smurf/data/EPS/mitf
+* correct include files in the *C files!
+* make sure .rootLogon.C file is correct
+* run top estimation:
+   * root -l
+   * .x dataEstimations.C+(5)

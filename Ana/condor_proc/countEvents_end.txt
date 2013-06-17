@@ -1,0 +1,39 @@
+ };
+  for(int i=0; i<nCha; i++){
+    TString RootFile = myRootFile[i];
+    TString theExec = "ls " + RootFile + " >& /dev/null";
+    if(gSystem->Exec(theExec)) continue;
+    _file[i] = TFile::Open(RootFile);
+    _file[i]->cd();
+
+    TH1D* Histo[6];
+    Histo[0] = (TH1D*) gROOT->FindObject("hDAllEvents");
+    Histo[1] = (TH1D*) gROOT->FindObject("hDGenWBF_0");
+    Histo[2] = (TH1D*) gROOT->FindObject("hFlavorClassification");
+    Histo[3] = (TH1D*) gROOT->FindObject("hDBeforeHLTSel_0");
+    Histo[4] = (TH1D*) gROOT->FindObject("hDwwPresel_0");
+    Histo[5] = (TH1D*) gROOT->FindObject("hDHKFactor_0");
+
+    printf("%s: %10.1f",RootFile.Data(),Histo[0]->GetSumOfWeights());
+    double nwbf = Histo[1]->GetSumOfWeights();
+    double nnowbf = Histo[0]->GetSumOfWeights() - nwbf;
+    if(nwbf > 0){
+      printf(" | N(wbf) = %10.1f",nwbf);
+      printf(" | N(no wbf) = %10.1f",nnowbf);
+      if(nnowbf - Histo[5]->GetSumOfWeights() !=0){
+        printf(" ---> N(wbf) + N(no wbf) != Ntot!");
+      }
+    }
+    printf(" | (ISR)==> %10.1f",Histo[2]->GetSumOfWeights());
+    printf(" | (Flavor)==> %10.1f",Histo[3]->GetSumOfWeights());
+    printf(" | (HLT)==> %10.1f",Histo[4]->GetSumOfWeights());
+    printf(" | (Weight)==> %10.1f",Histo[5]->GetSumOfWeights());
+    printf("\n");
+  }
+  for(int i=0; i<nCha; i++){
+    TString RootFile = myRootFile[i] + "_all_noskim.root";
+    TString theExec = "ls " + RootFile + " >& /dev/null";
+    if(gSystem->Exec(theExec)) continue;
+    _file[i]->Close();
+  }
+}

@@ -1,0 +1,3 @@
+{
+  gInterpreter->ExecuteMacro("MITStyle.C");
+}

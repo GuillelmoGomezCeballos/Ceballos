@@ -1,0 +1,43 @@
+# Need combine code first
+cd $CMSSW_BASE/src;
+cvs co -r 03-01-00 HiggsAnalysis/CombinedLimit;
+scramv1 b -j3;
+
+# Need to set-up CMSSW
+# In Guillelmo's code:
+source ~/EVAL_SH66 6_1_1;
+
+# This is just the way I setup CMSSW
+# You MUST change the scripts to do it in whatever way to do it
+
+# copy the input cards somewhere locally
+scp -r dtmit02:/data/smurf/ceballos/inputLimits/ana_Moriond13_2D .;
+
+# make combine cards, you can make as many text combinations files are you want
+# format: "hww_TAG.text", TAG is the name of the speficic combination
+./runCardsCombinations.sh /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT;
+
+# run one mass example. Imagine the data card under FOLDER/125 is called hww_zh.text
+./computeLimit.sh        zh 125     FOLDER
+./computeSignificance.sh zh 125 exp FOLDER
+./computeSignificance.sh zh 125 obs FOLDER
+./computeMuHatHWW.sh     zh 125     FOLDER
+
+
+# submit
+./submit.sh /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT 8TeV_ofshape exp;
+
+./submit.sh /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT 8TeV_ofshape obs;
+
+./submit.sh /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT 8TeV_ofshape mlf;
+
+./submit.sh /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT 8TeV_ofshape lim;
+
+# plotting
+source ~/EVAL_SH66 6_1_1
+
+./plotSignificance.py -t 8TeV_ofshape -d /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT;
+
+./plotMuHat.py        -t 8TeV_ofshape -d /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT;
+
+./plotLimits.py       -t 8TeV_ofshape -d /afs/cern.ch/user/c/ceballos/releases/CMSSW_4_2_8/src/Smurf/cards/HWW2l/ana_PostICHEP2012_BDT;

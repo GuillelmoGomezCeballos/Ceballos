@@ -1,0 +1,43 @@
+
+* All the code is under UserCode/Ceballos/lep3
+
+* Main analysis macro: ZHWWAnalysis
+
+* All the histograms follow this convention: hDVar_P_N
+
+   * P = Process
+      0  = ZH, H->WW
+      1  = Z->mm
+      2  = Z->ee
+      3  = Z->tautau
+      4  = WW
+      5  = ZZ
+      6  = qqbar
+      7  = 2-photon
+      8  = ZH, H->bb
+      9  = ZH, H->cc
+      10 = ZH, H->ss
+      11 = ZH, H->tt
+      12 = ZH, H->mm
+      13 = ZH, H->GG
+      14 = ZH, H->gg
+      15 = ZH, H->ZZ
+
+   * N = name of the histogram
+      * mass plots for relevant channels
+      36 = mass plot for ZH #rightarrow 2q2l2#nu-OF
+      37 = mass plot for ZH #rightarrow 2q2l2#nu-SF
+      63 = mass plot for ZH #rightarrow 2l4q
+      79 = mass plot for ZH #rightarrow 2l2l2#nu-OF
+      80 = mass plot for ZH #rightarrow 2l2l2#nu-SF
+      72 = mass plot for ZH #rightarrow 2l2ql#nu
+      * mass plots for less relevant channels
+      17 = mass plot for ZH #rightarrow 6q
+      30 = mass plot for ZH #rightarrow 4ql#nu
+      46 = mass plot for ZH #rightarrow 2#nu4q
+      54 = mass plot for ZH #rightarrow 2#nu2l2#nu-OF
+      55 = mass plot for ZH #rightarrow 2#nu2l2#nu-SF
+      89 = mass plot for ZH #rightarrow 2#nu2ql#nu
+
+* Simple macro to produce plots: dataMCcomp.C
+   * examples on makePlots.C

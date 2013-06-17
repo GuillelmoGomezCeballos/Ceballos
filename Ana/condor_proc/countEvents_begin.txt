@@ -1,0 +1,10 @@
+#include <TROOT.h>
+#include <TFile.h>
+#include <TSystem.h>
+#include <iostream>
+#include <fstream>
+#include "TH1D.h"
+void countEvents(){
+  const int nCha = 99999;
+  TFile *_file[nCha];
+  TString  myRootFile[nCha] = {

@@ -1,0 +1,1 @@
+grep -e cdaq -e "," -e HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v -e HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v -e HLT_Mu17_Mu8_v -e HLT_Mu17_TkMu8_v -e HLT_IsoMu24_eta2p1_v -e HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v -e HLT_Ele27_WP80_v triggerEvolution_all.html| awk '{print$1}' > sss
