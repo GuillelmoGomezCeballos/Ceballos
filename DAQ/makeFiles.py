@@ -2,63 +2,95 @@
 
 import os, time, sys, getopt
 import random
+import json
 
 """
 Do actual files
 """
-def doFiles(RUNNumber):
+def doFiles(RUNNumber, seeds, timeEnd, rate, path_to_make, streamName, sizePerFile, ls = 5):
+   # don't want to touch this at this point
+   lumiTimeSlot = 1
+
    random.seed(int(seeds))
    theNLoop = 1
    nInput = 0
    nOutput = 0
-   LSNumber = 0
+   LSNumber = ls
 
    start = time.time()
-   while (float(timeEnd) < 0.0 or float(time.time() - start) < float(timeEnd)):
+   while ((float(timeEnd) < 0.0 or float(time.time() - start) < float(timeEnd)) and (int(LSNumber) == int(ls))):
      time.sleep (float(rate))
-
+     #print LSNumber, ls
      # just in case we need more than one seed
      numberOfSeedsNeeded = 1
      seedsRND = []
      for i in range(0, numberOfSeedsNeeded):
        seedsRND.append(random.randint(0,999999))
 
+     myDir = "%sDATA/Run%d" % (path_to_make,RUNNumber)
+     if not os.path.exists(myDir):
+     	os.mkdir(myDir)
+     myDir = "%sMON/Run%d" % (path_to_make,RUNNumber)
+     if not os.path.exists(myDir):
+     	os.mkdir(myDir)
+     myDir = "%sAUX/Run%d" % (path_to_make,RUNNumber)
+     if not os.path.exists(myDir):
+     	os.mkdir(myDir)
+
      nInput += 100
      nOutput += 9
-     fileName =  "%s/Data.%d.LS%d.%s.%d.std.dat" % (path_to_make,RUNNumber,LSNumber,streamName,seedsRND[0])
+     fileName =  "%sDATA/Run%d/Data.%d.LS%d.%s.%d.raw" % (path_to_make,RUNNumber,RUNNumber,LSNumber,streamName,seedsRND[0])
      thefile = open(fileName, 'w')
      thefile.write('0' * 1024 * 1024 * int(sizePerFile))
      thefile.write("\n")
-     #msg  = "A B C D E F G H I - 0 - %d\n" % theNLoop
-     #for j in range(0, 50000000):
-     #   msg += "%d " % j
-     #   if(j%1000 == 0):
-     #	   msg += "\n"
-     #thefile.write(msg)
      thefile.close()
 
-     fileName =  "%s/Data.%d.LS%d.%s.%d.mon.dat" % (path_to_make,RUNNumber,LSNumber,streamName,seedsRND[0])
-     thefile = open(fileName, 'w')
-     thefile.write('0' * 1024 * 1024 * 1)
-     thefile.write("\n")
-     #msg = "A B C D E F G H I - 1 - %d\n" % theNLoop
-     #for j in range(0, 2000000):
-     #   msg += "%d " % j
-     #   if(j%1000 == 0):
-     #	   msg += "\n"
-     #thefile.write(msg)
-     thefile.close()
+     fileNameNoDir =  "Data.%d.LS%d.%s.%d.raw" % (RUNNumber,LSNumber,streamName,seedsRND[0])
+     fileNameAUX =  "%sAUX/Run%d/Data.%d.LS%d.%s.dat" % (path_to_make,RUNNumber,RUNNumber,LSNumber,streamName)
+     msg = "echo %s >> %s" % (fileNameNoDir,fileNameAUX)
+     os.system(msg)
 
-     fileName =  "%s/Data.%d.LS%d.%s.%d.met.dat" % (path_to_make,RUNNumber,LSNumber,streamName,seedsRND[0])
-     thefile = open(fileName, 'w')
-     thefile.write("100 9\n")
-     thefile.close()
+     if(theNLoop%50 == 0):
+        fileJSONName=  "%sMON/Data.%d.LS%d.%s.json" % (path_to_make,RUNNumber,LSNumber,streamName)
+        fileNameAUX =  "%sAUX/Run%d/Data.%d.LS%d.%s.dat" % (path_to_make,RUNNumber,RUNNumber,LSNumber,streamName)
+        fileAUX = open(fileNameAUX, 'r')
+        nFileLine = fileAUX.readline()
+	listOfFilesDict = []
+	while(nFileLine != ''):
+	   nFile = nFileLine.split('\n')
+	   listOfFilesDict.append(nFile[0])
+           nFileLine = fileAUX.readline()
+        fileAUX.close()	   
+        outputName = "merged/Run%d/Data.%d.LS%d.%s.raw" % (RUNNumber,RUNNumber,LSNumber,streamName)
+	outputNameDict = [outputName]
+        theJSONfile = open(fileJSONName, 'w')
+	#theJSONfile.write(json.dumps({'filelist': str(listOfFilesDict), 'outputName': str(outputNameDict)}, sort_keys=True, indent=4, separators=(',', ': ')))
+	theJSONfile.write("{\n\"filelist\": [")
+        for i in range(0, len(listOfFilesDict)):
+	   theJSONfile.write("\"")
+	   theJSONfile.write(listOfFilesDict[i])
+	   theJSONfile.write("\"")
+	   if(i != len(listOfFilesDict)-1): 
+	      theJSONfile.write(",")
+	theJSONfile.write("],\n\"outputName\": \" ")
+	theJSONfile.write(outputNameDict[0])
+	theJSONfile.write("\"\n}\n")
+        theJSONfile.close()	  
+        myDir = "merged"
+        if not os.path.exists(myDir):
+           os.mkdir(myDir)
+        myDir = "merged/Run%d" % (RUNNumber)
+        if not os.path.exists(myDir):
+           os.mkdir(myDir)
+        os.remove(fileNameAUX)
+	
+        fileJSONNameFinal =  "%sMON/Run%d/Data.%d.LS%d.%s.json" % (path_to_make,RUNNumber,RUNNumber,LSNumber,streamName)
+	msg = "mv %s %s" % (fileJSONName,fileJSONNameFinal)
+        os.system(msg)
+	
+	# every lumi section is Xsec
+	time.sleep(float(lumiTimeSlot))
 
-     if(theNLoop%30 == 0):
-	fileName =  "%s/Data.%d.LS%d.%s.0000.eol.dat" % (path_to_make,RUNNumber,LSNumber,streamName)
-	thefile = open(fileName, 'w')
-	thefile.write("%f %f\n" % (nInput,nOutput))
-	thefile.close()
 	nInput = 0
 	nOutput = 0
 	LSNumber += 1
@@ -70,57 +102,35 @@ def doFiles(RUNNumber):
 	RUNNumber += 1
 
      theNLoop += 1
+   #print "Thread finished for stream " + streamName + ", LS " + str(LSNumber)
+   return 0
 
 """
 Main
 """
-valid = ['path_to_make=', 'rate=', 'seeds=', 'timeEnd=', 
-         'run=', 'streamName=', 'sizePerFile=', 
-         'help']
 
-usage =  "Usage: listdir.py --path_to_make=<path to write files>\n"
-usage += "                  --rate=<rate_to_create_files (in seconds)>\n"
-usage += "                  --seeds=<initial seed>\n"
-usage += "                  --timeEnd=<time until stop (in seconds, 0 will never stop)>\n"
-usage += "                  --streamName=<stream name, (STREAMA by default)>\n"
-usage += "                  --sizePerFile=<in MB (50 by default, must be an integer)>\n"
-usage += "                  --run=<initial run>\n"
+def createFiles(streamName = "StreamA", sizePerFile = 50, ls = 10, path_to_make = "unmerged", rate = 0.0, seeds = 999, timeEnd = -1, RUNNumber = 100):
+    
+   myDir = "%sDATA" % (path_to_make)
+   if not os.path.exists(myDir):
+      try:
+          os.mkdir(myDir)
+      except OSError, e:
+          print "Looks like the directory " + myDir + " has just been created by someone else..."
+   myDir = "%sAUX" % (path_to_make)
+   if not os.path.exists(myDir):
+      try:
+          os.mkdir(myDir)
+      except OSError, e:
+          print "Looks like the directory " + myDir + " has just been created by someone else..."
 
-try:
-   opts, args = getopt.getopt(sys.argv[1:], "", valid)
-except getopt.GetoptError, ex:
-   print usage
-   print str(ex)
-   sys.exit(1)
-
-path_to_make = "unmerged"
-rate         = 0.0
-seeds        = 999
-timeEnd      = -1
-RUNNumber    = 100
-streamName   = "STREAMA"
-sizePerFile  = 50
-
-for opt, arg in opts:
-   if opt == "--help":
-      print usage
-      sys.exit(1)
-   if opt == "--path_to_make":
-      path_to_make = arg
-   if opt == "--rate":
-      rate = arg
-   if opt == "--seeds":
-      seeds = arg
-   if opt == "--timeEnd":
-      timeEnd = arg
-   if opt == "--run":
-      RUNNumber = arg
-   if opt == "--streamName":
-      streamName = arg
-   if opt == "--sizePerFile":
-      sizePerFile = arg
-
-if not os.path.exists(path_to_make):
-   os.mkdir(path_to_make)
-
-doFiles(int(RUNNumber))
+   myDir = "%sMON" % (path_to_make)
+   if not os.path.exists(myDir):
+      try:
+          os.mkdir(myDir)
+      except OSError, e:
+          print "Looks like the directory has just been created by someone else..." 
+    
+   doFiles(int(RUNNumber), seeds, timeEnd, rate, path_to_make, streamName, sizePerFile, ls)
+   #print "create Files returning for " + streamName
+   return 0

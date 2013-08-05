@@ -1,7 +1,7 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/factors.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/LeptonScaleLookup.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/trilepton.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/factors.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/LeptonScaleLookup.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Ana/nt_scripts/trilepton.h"
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -15,18 +15,18 @@
 #include "TMath.h"
 #include "TCanvas.h"
 #include "TSystem.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HiggsWWStarMassBoundNoROOT.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/DYBkgScaleFactors_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/TopBkgScaleFactors_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/TopVBFBkgScaleFactors_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/WWBkgScaleFactors_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HWWCuts.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HiggsQCDScaleSystematics_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/PSUESystematics_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/PDFgHHSystematics_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/InterfgHHSystematics_7TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HWWKinematics.cc"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HiggsWWStarMassBoundNoROOT.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/DYBkgScaleFactors_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/TopBkgScaleFactors_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/TopVBFBkgScaleFactors_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/WWBkgScaleFactors_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HWWCuts.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HiggsQCDScaleSystematics_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/PSUESystematics_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/PDFgHHSystematics_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/InterfgHHSystematics_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HWWKinematics.cc"
 
 const int verboseLevel =   1;
 
@@ -196,7 +196,7 @@ void optimalCuts_42x
   else if(thePlot >= 23 && thePlot <= 29) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot = 5.0;}
   else if(thePlot >= 30 && thePlot <= 30) {nBinPlot = 200; xminPlot = -5.0; xmaxPlot = 15.0;}
   else if(thePlot >= 31 && thePlot <= 33) {nBinPlot = 300; xminPlot = 0.0; xmaxPlot = 600.0;}
-  else if(thePlot >= 34 && thePlot <= 34) {nBinPlot = 80; xminPlot = 0.0; xmaxPlot =  800.0;}
+  else if(thePlot >= 34 && thePlot <= 34) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =  1000.0;}
   else if(thePlot >= 35 && thePlot <= 35) {nBinPlot = 50; xminPlot = 0.0; xmaxPlot =  8.75;}
   else if(thePlot >= 36 && thePlot <= 36) {nBinPlot = 3; xminPlot = -0.5; xmaxPlot =  2.5;}
   else if(thePlot >= 37 && thePlot <= 38) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =  100.0;}
@@ -627,7 +627,7 @@ void optimalCuts_42x
         (fabs(bgdEvent.dilep_.M()-91.1876) > 15. || bgdEvent.type_ == SmurfTree::em || bgdEvent.type_ == SmurfTree::me) && 
 	 dPhiDiLepJetCut == true &&
         (bgdEvent.cuts_ & patternTopVeto) == patternTopVeto &&
-        (bgdEvent.jet1_+bgdEvent.jet2_).M() > 450. &&
+        (bgdEvent.jet1_+bgdEvent.jet2_).M() > 500. &&
           TMath::Abs(bgdEvent.jet1_.Eta()-bgdEvent.jet2_.Eta()) > 3.5 &&
 	 centrality == 1 &&
 	 (bgdEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (bgdEvent.type_ == SmurfTree::mm || bgdEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (bgdEvent.type_ == SmurfTree::em || bgdEvent.type_ == SmurfTree::me))) &&
@@ -1327,7 +1327,7 @@ void optimalCuts_42x
         (fabs(sigEvent.dilep_.M()-91.1876) > 15. || sigEvent.type_ == SmurfTree::em || sigEvent.type_ == SmurfTree::me) && 
 	 dPhiDiLepJetCut == true &&
         (sigEvent.cuts_ & patternTopVeto) == patternTopVeto &&
-        (sigEvent.jet1_+sigEvent.jet2_).M() > 450. &&
+        (sigEvent.jet1_+sigEvent.jet2_).M() > 500. &&
           TMath::Abs(sigEvent.jet1_.Eta()-sigEvent.jet2_.Eta()) > 3.5 &&
 	 centrality == 1 &&
 	 (sigEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (sigEvent.type_ == SmurfTree::mm || sigEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (sigEvent.type_ == SmurfTree::em || sigEvent.type_ == SmurfTree::me))) &&
@@ -1869,7 +1869,7 @@ void optimalCuts_42x
         (fabs(dataEvent.dilep_.M()-91.1876) > 15. || dataEvent.type_ == SmurfTree::em || dataEvent.type_ == SmurfTree::me) && 
 	 dPhiDiLepJetCut == true &&
         (dataEvent.cuts_ & patternTopVeto) == patternTopVeto &&
-        (dataEvent.jet1_+dataEvent.jet2_).M() > 450. &&
+        (dataEvent.jet1_+dataEvent.jet2_).M() > 500. &&
           TMath::Abs(dataEvent.jet1_.Eta()-dataEvent.jet2_.Eta()) > 3.5 &&
 	 centrality == 1 &&
 	 (dataEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (dataEvent.type_ == SmurfTree::mm || dataEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (dataEvent.type_ == SmurfTree::em || dataEvent.type_ == SmurfTree::me))) &&

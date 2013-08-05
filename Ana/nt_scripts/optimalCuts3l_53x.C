@@ -1,8 +1,8 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/factors.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/LeptonScaleLookup.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/trilepton.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/factors.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/LeptonScaleLookup.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Ana/nt_scripts/trilepton.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_8TeV.h"
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -191,7 +191,8 @@ void optimalCuts3l_53x
   else if(thePlot >= 49 && thePlot <= 52) {nBinPlot = 300; xminPlot = -15.; xmaxPlot = 15.;}
   else if(thePlot >= 53 && thePlot <= 53) {nBinPlot = 180; xminPlot = 0.0; xmaxPlot = 180.0;}
   else if(thePlot >= 54 && thePlot <= 54) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = 200.0;}
-  else if(thePlot >= 61 && thePlot <= 66) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = 200.0;}
+  else if(thePlot >= 61 && thePlot <= 61) {nBinPlot = 20;  xminPlot = 0.0; xmaxPlot = 400.0;}
+  else if(thePlot >= 62 && thePlot <= 62) {nBinPlot = 20;  xminPlot = 0.0; xmaxPlot = 800.0;}
   nBin = nBinPlot;
 
   double S0[nBin],S1[nBin];
@@ -1736,17 +1737,17 @@ void optimalCuts3l_53x
 
 	double add = 1.;
 	add = add*nPUScaleFactor2012(fhDPU,(float)sigEvent.npu_);
-	/*if((sigEvent.cuts_ & SmurfTree::Lep1FullSelection) == SmurfTree::Lep1FullSelection)
+	if((sigEvent.cuts_ & SmurfTree::Lep1FullSelection) == SmurfTree::Lep1FullSelection)
           add = add*leptonEfficiency(sigEvent.lep1_.Pt(), sigEvent.lep1_.Eta(), fhDEffMu, fhDEffEl, sigEvent.lid1_);
 	if((sigEvent.cuts_ & SmurfTree::Lep2FullSelection) == SmurfTree::Lep2FullSelection)
           add = add*leptonEfficiency(sigEvent.lep2_.Pt(), sigEvent.lep2_.Eta(), fhDEffMu, fhDEffEl, sigEvent.lid2_);
 	if((sigEvent.cuts_ & SmurfTree::Lep3FullSelection) == SmurfTree::Lep3FullSelection)
-          add = add*leptonEfficiency(sigEvent.lep3_.Pt(), sigEvent.lep3_.Eta(), fhDEffMu, fhDEffEl, sigEvent.lid3_);*/
+          add = add*leptonEfficiency(sigEvent.lep3_.Pt(), sigEvent.lep3_.Eta(), fhDEffMu, fhDEffEl, sigEvent.lid3_);
 	// CAREFUL HERE, no data-driven corrections, just Higgs k-factors
 	// add = 1.0;
-        //if(TMath::Abs((sigEvent.sfWeightFR_*sigEvent.sfWeightPU_*sigEvent.sfWeightEff_*sigEvent.sfWeightTrig_)-add*trigEff)/add/trigEff>0.0001) {
-        //printf("PROBLEM: %f %f = %f - %f %f %f %f = %f\n",add,trigEff,add*trigEff,sigEvent.sfWeightFR_,sigEvent.sfWeightPU_,sigEvent.sfWeightEff_,sigEvent.sfWeightTrig_,sigEvent.sfWeightFR_*sigEvent.sfWeightPU_*sigEvent.sfWeightEff_*sigEvent.sfWeightTrig_);
-        //}
+        if(TMath::Abs((sigEvent.sfWeightFR_*sigEvent.sfWeightPU_*sigEvent.sfWeightEff_*sigEvent.sfWeightTrig_)-add*trigEff)/add/trigEff>0.0001) {
+        printf("PROBLEM: %f %f = %f - %f %f %f %f = %f\n",add,trigEff,add*trigEff,sigEvent.sfWeightFR_,sigEvent.sfWeightPU_,sigEvent.sfWeightEff_,sigEvent.sfWeightTrig_,sigEvent.sfWeightFR_*sigEvent.sfWeightPU_*sigEvent.sfWeightEff_*sigEvent.sfWeightTrig_);
+        }
 	if(isFermioPhobic == true) {
           add = add * enhancementFactor(mhAna,2); // FF BR(H->WW) enhancement factor
 	  if(sigEvent.processId_==121 || sigEvent.processId_==122) add = 0.0;

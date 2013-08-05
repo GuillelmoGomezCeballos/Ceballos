@@ -17,3 +17,12 @@ root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+
 root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"backgroundA.root\",\"backgroundA_skim10.root\",10\)
 root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"data.root\",\"data_skim10.root\",10\)
 root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"hww_syst.root\",\"hww_syst_skim10.root\",10\)
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"backgroundZH.root\",\"backgroundZH_skim10.root\",10\)
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"zh_syst.root\",\"zh_syst_skim10.root\",10\)
+
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"gamma.root\",\"gamma_skim10.root\",11\)
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"lgamma.root\",\"lgamma_skim10.root\",11\)
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"gamma75.root\",\"gamma75_skim10.root\",11\)
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"lgamma75.root\",\"lgamma75_skim10.root\",11\)
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"gamma50.root\",\"gamma50_skim10.root\",11\)
+root -l -q -b ~/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/skimFastNtuple.C+\(\"lgamma50.root\",\"lgamma50_skim10.root\",11\)

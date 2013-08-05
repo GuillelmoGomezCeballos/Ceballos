@@ -14,7 +14,7 @@ seed=$RANDOM
 mkdir -p /tmp/$USER/${seed}/
 cd /tmp/$USER/${seed}/
 
-echo "combine -M MaxLikelihoodFit ${workspace} -m ${mass} --plot --signalPdfNames='*ZH*' --backgroundPdfNames='*WZ*,*EM*,*ZZ*,*Wjets*' --saveNorm --rMin=-2 --rMax=4 --robustFit=1 --X-rtd FITTER_DYN_STEP -n hWW${tag} | tee mlf${tag}.txt"
-      combine -M MaxLikelihoodFit ${workspace} -m ${mass} --plot --signalPdfNames='*ZH*' --backgroundPdfNames='*WZ*,*EM*,*ZZ*,*Wjets*' --saveNorm --rMin=-2 --rMax=4 --robustFit=1 --X-rtd FITTER_DYN_STEP -n hWW${tag} | tee mlf${tag}.txt;
+echo "combine -M MaxLikelihoodFit ${workspace} -m ${mass} --plot --signalPdfNames='*ZH*,*WH*,*qqH*,*ggH*' --backgroundPdfNames='*qqWW*,*ggWW*,*VV*,*Top*,*Zjets*,*Wjets*,*Wgamma*,*Wg3l*,*Ztt*' --saveNorm --rMin=-2 --rMax=4 --robustFit=1 --X-rtd FITTER_DYN_STEP -n hWW${tag} | tee mlf${tag}.txt"
+      combine -M MaxLikelihoodFit ${workspace} -m ${mass} --plot --signalPdfNames='*ZH*,*WH*,*qqH*,*ggH*' --backgroundPdfNames='*qqWW*,*ggWW*,*VV*,*Top*,*Zjets*,*Wjets*,*Wgamma*,*Wg3l*,*Ztt*' --saveNorm --rMin=-2 --rMax=4 --robustFit=1 --X-rtd FITTER_DYN_STEP -n hWW${tag} | tee mlf${tag}.txt;
 mv higgsCombinehWW${tag}.MaxLikelihoodFit.mH${mass}.root mlf${tag}.txt $baseDir/$mass/;
 mv mlfithWW${tag}.root $baseDir/$mass/;

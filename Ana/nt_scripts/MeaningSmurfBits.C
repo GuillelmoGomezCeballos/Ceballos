@@ -1,4 +1,4 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
 
 void MeaningSmurfBits(){
   cout << "BaseLine------------- " << SmurfTree::BaseLine	    << endl;

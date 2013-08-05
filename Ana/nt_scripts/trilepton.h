@@ -107,26 +107,26 @@ else if(nsel == 6) {
   return massminSFSS;
 }
 else if(nsel > 10) {
-  if     ((nsel == 61 || nsel == 64) && (l1+l2).pt() > 30.0) {
+  if     ((nsel == 61 || nsel == 62) && TMath::Abs((l1+l2).M() - 91.1876) < 15.0) {
     double metx = met*cos(metPhi)-l3.px();
     double mety = met*sin(metPhi)-l3.py();
     double newMT = sqrt(2.0*(l1+l2).pt()*sqrt(metx*metx+mety*mety)*(1.0-cos(DeltaPhi((l1+l2).phi(),TMath::ATan2(mety,metx)))));
-    if     (nsel == 61 && (l1+l2).M() >  0 && (l1+l2).M() < 999 && newMT > 60 && newMT < 125) return (l1+l2).M();
-    else if(nsel == 64 && (l1+l2).M() > 12 && (l1+l2).M() <  45 && newMT >  0 && newMT < 999) return newMT;
+    if     (nsel == 61) return sqrt(metx*metx+mety*mety);
+    else if(nsel == 62) return newMT;
   }
-  else if((nsel == 62 || nsel == 65) && (l1+l3).pt() > 30.0) {
+  else if((nsel == 61 || nsel == 62) && TMath::Abs((l1+l3).M() - 91.1876) < 15.0) {
     double metx = met*cos(metPhi)-l2.px();
     double mety = met*sin(metPhi)-l2.py();
     double newMT = sqrt(2.0*(l1+l3).pt()*sqrt(metx*metx+mety*mety)*(1.0-cos(DeltaPhi((l1+l3).phi(),TMath::ATan2(mety,metx)))));
-    if     (nsel == 62 && (l1+l3).M() >  0 && (l1+l3).M() < 999 && newMT > 60 && newMT < 125) return (l1+l3).M();
-    else if(nsel == 65 && (l1+l3).M() > 12 && (l1+l3).M() <  45 && newMT >  0 && newMT < 999) return newMT;
+    if     (nsel == 61) return sqrt(metx*metx+mety*mety);
+    else if(nsel == 62) return newMT;
   }
-  else if((nsel == 63 || nsel == 66) && (l2+l3).pt() > 30.0) {
+  else if((nsel == 61 || nsel == 62) && TMath::Abs((l2+l3).M() - 91.1876) < 15.0) {
     double metx = met*cos(metPhi)-l1.px();
     double mety = met*sin(metPhi)-l1.py();
     double newMT = sqrt(2.0*(l2+l3).pt()*sqrt(metx*metx+mety*mety)*(1.0-cos(DeltaPhi((l2+l3).phi(),TMath::ATan2(mety,metx)))));
-    if     (nsel == 63 && (l2+l3).M() >  0 && (l2+l3).M() < 999 && newMT > 60 && newMT < 125) return (l2+l3).M();
-    else if(nsel == 66 && (l2+l3).M() > 12 && (l2+l3).M() <  45 && newMT >  0 && newMT < 999) return newMT;
+    if     (nsel == 61) return sqrt(metx*metx+mety*mety);
+    else if(nsel == 62) return newMT;
   }
 }
 return -10.0;

@@ -1,5 +1,5 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/factors.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/factors.h"
 #include <TFile.h>
 #include <TTree.h>
 #include <iostream>
@@ -20,7 +20,7 @@ void preselection_plots
  int thePlot = 12,
  unsigned int option  =  0,
  //TString bgdInputFile    = "ntuples_42x_pu/backgroundD.root",
- //TString bgdInputFile    = "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/test/histo_ww_new_smurf0_all_noskim.root",
+ //TString bgdInputFile    = "/home/ceballos/releases/CMSSW_5_2_8/src/test/histo_ww_new_smurf0_all_noskim.root",
  TString bgdInputFile    = "/data/smurf/data/Run2012_Summer12_SmurfV9_53X/mitf-alljets_noweights/data.root",
  TString signalInputFile = "ntuples_42x_pu/hww160.root",
  TString dataInputFile   = "ntuples_42x_pu/data.root"

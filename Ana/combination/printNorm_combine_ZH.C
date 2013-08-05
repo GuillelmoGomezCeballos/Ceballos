@@ -74,13 +74,13 @@ void printNorm_combine_ZH(TString mlfit="mlfit.root", TString card="cards/test/1
     norm_fit_s->Print("v"); // for debugging  
     RooRealVar *r; 
     
-    if(pre_ZH)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_final_binch1_proc_ZH");     post_ZH    = (float)r->getVal(); } 
-    if(pre_Zjets)   { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch1_proc_Zjets");        post_Zjets = (float)r->getVal(); } 
-    if(pre_VVV)     { r =  (RooRealVar*) norm_fit_s->find("n_exp_final_binch1_proc_VVV");    post_VVV   = (float)r->getVal(); } 
-    if(pre_WZ)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_final_binch1_proc_WZ");     post_WZ    = (float)r->getVal(); } 
-    if(pre_ZZ)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_final_binch1_proc_ZZ");     post_ZZ    = (float)r->getVal(); } 
-    if(pre_EM)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_final_binch1_proc_EM");     post_EM    = (float)r->getVal(); } 
-    if(pre_Wjets)   { r =  (RooRealVar*) norm_fit_s->find("n_exp_final_binch1_proc_Wjets");  post_Wjets = (float)r->getVal(); } 
+    if(pre_ZH)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch2_proc_ZH");     post_ZH    = (float)r->getVal(); } 
+    if(pre_Zjets)   { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch2_proc_Zjets");        post_Zjets = (float)r->getVal(); } 
+    if(pre_VVV)     { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch2_proc_VVV");    post_VVV   = (float)r->getVal(); } 
+    if(pre_WZ)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch2_proc_WZ");     post_WZ    = (float)r->getVal(); } 
+    if(pre_ZZ)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch2_proc_ZZ");     post_ZZ    = (float)r->getVal(); } 
+    if(pre_EM)      { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch2_proc_EM");     post_EM    = (float)r->getVal(); } 
+    if(pre_Wjets)   { r =  (RooRealVar*) norm_fit_s->find("n_exp_binch2_proc_Wjets");  post_Wjets = (float)r->getVal(); } 
 
     // 
     // print table 

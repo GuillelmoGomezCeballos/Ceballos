@@ -10,12 +10,12 @@ typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVector;
 void makeSystematicEffects(int lid1_, int lid2_, LorentzVector lep1_, LorentzVector lep2_, LorentzVector dilep_, 
                            double mt_, double met_, double metPhi_, 
                            double trackMet_, double trackMetPhi_, double njets_, int year, int nsel,
-			   double outputVar[13]);
+			   double outputVar[14]);
 
 void makeSystematicEffects(int lid1_, int lid2_, LorentzVector lep1_, LorentzVector lep2_, LorentzVector dilep_, 
                            double mt_, double met_, double metPhi_, 
                            double trackMet_, double trackMetPhi_, double njets_, int year, int nsel,
-			   double outputVar[13]){
+			   double outputVar[14]){
   if (year != 2011 && year != 2012) assert(0);
   double rndMon2012[12] = {gRandom->Gaus(0.00,0.010),gRandom->Gaus(0.00,0.017),gRandom->Gaus(0.00,0.015),gRandom->Gaus(0.00,0.030),
   			   gRandom->Gaus(0.00,0.010),gRandom->Gaus(0.00,0.017),gRandom->Gaus(0.00,0.015),gRandom->Gaus(0.00,0.030),
@@ -96,8 +96,8 @@ void makeSystematicEffects(int lid1_, int lid2_, LorentzVector lep1_, LorentzVec
     dPhiDiLepMET = DeltaPhi(llPhi,metPhi_);
     dPhiMETTrkMET = DeltaPhi(trackMetPhi_ ,metPhi_);
     pTFrac = fabs(met_-dilpt)/dilpt;
-    mtZ = (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))*
-          (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))-
+    mtZ = (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))*
+          (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))-
 	  (pllx+met*cos(metPhi)+plly+met*sin(metPhi))*
 	  (pllx+met*cos(metPhi)+plly+met*sin(metPhi));
     if(mtZ >= 0) mtZ = sqrt(mtZ); else mtZ = 0.0;
@@ -173,8 +173,8 @@ void makeSystematicEffects(int lid1_, int lid2_, LorentzVector lep1_, LorentzVec
     dPhiDiLepMET = DeltaPhi(llPhi,metPhi_);
     dPhiMETTrkMET = DeltaPhi(trackMetPhi_ ,metPhi_);
     pTFrac = fabs(met_-dilpt)/dilpt;
-    mtZ = (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))*
-          (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))-
+    mtZ = (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))*
+          (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))-
 	  (pllx+met*cos(metPhi)+plly+met*sin(metPhi))*
 	  (pllx+met*cos(metPhi)+plly+met*sin(metPhi));
     if(mtZ >= 0) mtZ = sqrt(mtZ); else mtZ = 0.0;
@@ -248,8 +248,8 @@ void makeSystematicEffects(int lid1_, int lid2_, LorentzVector lep1_, LorentzVec
     dPhiDiLepMET = DeltaPhi(dilep_.phi(),TMath::ATan2(mety,metx));
     dPhiMETTrkMET = DeltaPhi(TMath::ATan2(trkmety,trkmetx) ,TMath::ATan2(mety,metx));
     pTFrac = fabs(newMet-dilpt)/dilpt;
-    mtZ = (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))*
-          (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))-
+    mtZ = (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))*
+          (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))-
 	  (dilep_.px()+met*cos(metPhi)+dilep_.py()+met*sin(metPhi))*
 	  (dilep_.px()+met*cos(metPhi)+dilep_.py()+met*sin(metPhi));
     if(mtZ >= 0) mtZ = sqrt(mtZ); else mtZ = 0.0;
@@ -273,8 +273,8 @@ void makeSystematicEffects(int lid1_, int lid2_, LorentzVector lep1_, LorentzVec
     dPhiDiLepMET = DeltaPhi(llPhi,metPhi_);
     dPhiMETTrkMET = DeltaPhi(trackMetPhi_ ,metPhi_);
     pTFrac = fabs(met_-dilpt)/dilpt;
-    mtZ = (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))*
-          (sqrt(dilpt*dilpt+91.1876*91.1876)+sqrt(met*met+91.1876*91.1876))-
+    mtZ = (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))*
+          (sqrt(dilpt*dilpt+dilmass*dilmass)+sqrt(met*met+dilmass*dilmass))-
 	  (pllx+met*cos(metPhi)+plly+met*sin(metPhi))*
 	  (pllx+met*cos(metPhi)+plly+met*sin(metPhi));
     if(mtZ >= 0) mtZ = sqrt(mtZ); else mtZ = 0.0;
@@ -294,4 +294,5 @@ void makeSystematicEffects(int lid1_, int lid2_, LorentzVector lep1_, LorentzVec
   outputVar[10] = dPhiMETTrkMET;
   outputVar[11] = pTFrac;
   outputVar[12] = mtZ;
+  outputVar[13] = mt;
 }

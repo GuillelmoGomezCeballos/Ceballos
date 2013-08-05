@@ -1,7 +1,7 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/factors.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/LeptonScaleLookup.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/trilepton.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/factors.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/LeptonScaleLookup.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Ana/nt_scripts/trilepton.h"
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -15,7 +15,7 @@
 #include "TMath.h"
 #include "TCanvas.h"
 #include "TSystem.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HiggsWWStarMassBoundNoROOT.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HiggsWWStarMassBoundNoROOT.h"
 
 const int verboseLevel =   1;
 
@@ -85,7 +85,7 @@ void optimalCuts_Study
   fNvtxFile->Close();
   delete fNvtxFile;
 
-  TFile *fPUS4File = TFile::Open("/home/ceballos/releases/CMSSW_5_2_3_patch3/src/MitPhysics/data/puWeights_PU4_68mb.root");
+  TFile *fPUS4File = TFile::Open("/home/ceballos/releases/CMSSW_5_2_8/src/MitPhysics/data/puWeights_PU4_68mb.root");
   TH1D *fhDPUS4 = (TH1D*)(fPUS4File->Get("puWeights"));
   assert(fhDPUS4);
   fhDPUS4->SetDirectory(0);

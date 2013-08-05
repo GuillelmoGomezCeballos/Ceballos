@@ -1,7 +1,7 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/factors.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/LeptonScaleLookup.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/trilepton.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/factors.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/LeptonScaleLookup.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Ana/nt_scripts/trilepton.h"
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -15,18 +15,18 @@
 #include "TMath.h"
 #include "TCanvas.h"
 #include "TSystem.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HiggsWWStarMassBoundNoROOT.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/DYBkgScaleFactors_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/TopBkgScaleFactors_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/TopVBFBkgScaleFactors_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/WWBkgScaleFactors_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HWWCuts.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HiggsQCDScaleSystematics_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/PSUESystematics_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/PDFgHHSystematics_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/InterfgHHSystematics_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HWWKinematics.cc"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HiggsWWStarMassBoundNoROOT.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/DYBkgScaleFactors_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/TopBkgScaleFactors_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/TopVBFBkgScaleFactors_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/WWBkgScaleFactors_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HWWCuts.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HiggsQCDScaleSystematics_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/PSUESystematics_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/PDFgHHSystematics_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/InterfgHHSystematics_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HWWKinematics.cc"
 
 const int verboseLevel =   1;
 const bool UseDyttDataDriven = true; // if true, then remove em events in dyll MC
@@ -37,7 +37,7 @@ void optimalCuts_53x
  int     mH  	 = 29,
  int thePlot = 7,
  TString bgdInputFile    = "ntuples_53x/backgroundA_skim6.root",
- TString signalInputFile = "ntuples_53x/hww160.root",
+ TString signalInputFile = "ntuples_53x/hww125.root",
  TString dataInputFile   = "ntuples_53x/data_skim6.root",
  bool fillInfoNote = false,
  double mhAna = 4,
@@ -205,7 +205,7 @@ void optimalCuts_53x
   else if(thePlot >= 30 && thePlot <= 30) {nBinPlot = 200; xminPlot = -5.0; xmaxPlot = 15.0;}
   else if(thePlot >= 31 && thePlot <= 32) {nBinPlot = 300; xminPlot = 0.0; xmaxPlot = 600.0;}
   else if(thePlot >= 33 && thePlot <= 33) {nBinPlot = 90; xminPlot = 0.0; xmaxPlot = 180.0;}
-  else if(thePlot >= 34 && thePlot <= 34) {nBinPlot = 80; xminPlot = 0.0; xmaxPlot =  800.0;}
+  else if(thePlot >= 34 && thePlot <= 34) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =  1000.0;}
   else if(thePlot >= 35 && thePlot <= 35) {nBinPlot = 50; xminPlot = 0.0; xmaxPlot =  8.75;}
   else if(thePlot >= 36 && thePlot <= 36) {nBinPlot = 3; xminPlot = -0.5; xmaxPlot =  2.5;}
   else if(thePlot >= 37 && thePlot <= 37) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =  2000.0;}

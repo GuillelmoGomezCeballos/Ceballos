@@ -1,8 +1,8 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/factors.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/LeptonScaleLookup.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/trilepton.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_7TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/factors.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/LeptonScaleLookup.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Ana/nt_scripts/trilepton.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_7TeV.h"
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -198,7 +198,7 @@ void optimalCuts3l_42x
   else if(thePlot >= 23 && thePlot <= 29) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot = 5.0;}
   else if(thePlot >= 30 && thePlot <= 31) {nBinPlot = 400; xminPlot = 0.0; xmaxPlot =  400.0;}
   else if(thePlot >= 32 && thePlot <= 33) {nBinPlot = 120; xminPlot = 0; xmaxPlot = 12.0;}
-  else if(thePlot >= 34 && thePlot <= 34) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =  1000.0;}
+  else if(thePlot >= 34 && thePlot <= 34) {nBinPlot = 80; xminPlot = 0.0; xmaxPlot =  800.0;}
   else if(thePlot >= 35 && thePlot <= 35) {nBinPlot = 50; xminPlot = 0.0; xmaxPlot =  8.75;}
   else if(thePlot >= 36 && thePlot <= 36) {nBinPlot = 3; xminPlot = -0.5; xmaxPlot =  2.5;}
   else if(thePlot >= 37 && thePlot <= 37) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =  100.0;}
@@ -212,7 +212,8 @@ void optimalCuts3l_42x
   else if(thePlot >= 49 && thePlot <= 52) {nBinPlot = 300; xminPlot = -15.; xmaxPlot = 15.;}
   else if(thePlot >= 53 && thePlot <= 53) {nBinPlot = 180; xminPlot = 0.0; xmaxPlot = 180.0;}
   else if(thePlot >= 54 && thePlot <= 54) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = 200.0;}
-  else if(thePlot >= 61 && thePlot <= 66) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = 200.0;}
+  else if(thePlot >= 61 && thePlot <= 61) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = 400.0;}
+  else if(thePlot >= 62 && thePlot <= 62) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = 800.0;}
   nBin = nBinPlot;
 
   double S0[nBin],S1[nBin];
@@ -498,6 +499,7 @@ void optimalCuts3l_42x
     else if(bgdEvent.dstype_ == SmurfTree::dytt  	   ) fDecay = 10;
     else if(bgdEvent.dstype_ == SmurfTree::tw    	   ) fDecay = 13;
     else if(bgdEvent.dstype_ == SmurfTree::qqww  	   ) fDecay = 29;
+    else if(bgdEvent.dstype_ == SmurfTree::qqww2j  	   ) fDecay = 29;
     else if(bgdEvent.dstype_ == SmurfTree::wz    	   ) fDecay = 27;
     else if(bgdEvent.dstype_ == SmurfTree::zz    	   ) fDecay = 28;
     else if(bgdEvent.dstype_ == SmurfTree::ggww  	   ) fDecay = 30;

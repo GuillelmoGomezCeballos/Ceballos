@@ -140,7 +140,7 @@
     else {printf("bgdEvent.dstype_: %d\n",bgdEvent.dstype_); assert(0);}
 
 ====> triggerL1Upgrade.C
-    int versionTrigger = 1;
+    int versionTrigger = 5;
     double trg_EG    = 46;    			  double trg_EG_eff    = 1.00; 
     double trg_EGISO = 38;  			  double trg_EGISO_eff = 0.90;
     double trg_Mu    = 23;    			  double trg_Mu_eff    = 0.95; 
@@ -149,9 +149,9 @@
     double trg_DMu0  = 18; double trg_DMu1  = 10; double trg_DMu_eff   = 0.90;
     double trg_EGMu0 = 21; double trg_EGMu1 = 11; double trg_EGMu_eff  = 0.85; 
     double trg_MuEG0 = 18; double trg_MuEG1 = 14; double trg_MuEG_eff  = 0.95; 
-    if     (versionTrigger == 1){
+    if     (versionTrigger == 1){ // L1
     }
-    else if(versionTrigger == 2){
+    else if(versionTrigger == 2){ // L1
       trg_EG	= 45;		       trg_EG_eff    = 1.00;
       trg_EGISO = 25;		       trg_EGISO_eff = 0.90;
       trg_Mu	= 18;		       trg_Mu_eff    = 0.92;
@@ -161,7 +161,7 @@
       trg_EGMu0 = 19;  trg_EGMu1 = 10; trg_EGMu_eff  = 0.85; 
       trg_MuEG0 = 16;  trg_MuEG1 = 14; trg_MuEG_eff  = 0.83; 
     }
-    else if(versionTrigger == 3){
+    else if(versionTrigger == 3){ // L1
       trg_EG	= 67;		       trg_EG_eff    = 1.00;
       trg_EGISO = 52;		       trg_EGISO_eff = 0.90;
       trg_Mu	= 42;		       trg_Mu_eff    = 0.95;
@@ -171,7 +171,7 @@
       trg_EGMu0 = 24;  trg_EGMu1 = 12; trg_EGMu_eff  = 0.85; 
       trg_MuEG0 = 20;  trg_MuEG1 = 15; trg_MuEG_eff  = 0.95; 
     }
-    else if(versionTrigger == 4){
+    else if(versionTrigger == 4){ // L1
       trg_EG	= 57;		       trg_EG_eff    = 1.00;
       trg_EGISO = 31;		       trg_EGISO_eff = 0.90;
       trg_Mu	= 22;		       trg_Mu_eff    = 0.90; 
@@ -180,6 +180,26 @@
       trg_DMu0  = 15;  trg_DMu1  = 10; trg_DMu_eff   = 0.80; 
       trg_EGMu0 = 20;  trg_EGMu1 = 10; trg_EGMu_eff  = 0.85; 
       trg_MuEG0 = 18;  trg_MuEG1 = 15; trg_MuEG_eff  = 0.83; 
+    }
+    else if(versionTrigger == 5){ // original
+      trg_EG	= 27;		       trg_EG_eff    = 1.00;
+      trg_EGISO = 99;		       trg_EGISO_eff = 0.00;
+      trg_Mu	= 24;		       trg_Mu_eff    = 0.90; 
+      trg_MuISO	= 99;		       trg_MuISO_eff = 0.00; 
+      trg_DEG0  = 17;  trg_DEG1  =  8; trg_DEG_eff   = 1.00;
+      trg_DMu0  = 17;  trg_DMu1  =  8; trg_DMu_eff   = 0.90; 
+      trg_EGMu0 = 17;  trg_EGMu1 =  8; trg_EGMu_eff  = 0.95; 
+      trg_MuEG0 = 17;  trg_MuEG1 =  8; trg_MuEG_eff  = 0.95; 
+    }
+    else if(versionTrigger == 6){ // HLT2015
+      trg_EG	= 36;		       trg_EG_eff    = 1.00;
+      trg_EGISO = 99;		       trg_EGISO_eff = 0.00;
+      trg_Mu	= 34;		       trg_Mu_eff    = 0.90; 
+      trg_MuISO	= 99;		       trg_MuISO_eff = 0.00; 
+      trg_DEG0  = 17;  trg_DEG1  =  8; trg_DEG_eff   = 1.00;
+      trg_DMu0  = 23;  trg_DMu1  = 10; trg_DMu_eff   = 0.90; 
+      trg_EGMu0 = 20;  trg_EGMu1 = 10; trg_EGMu_eff  = 0.95; 
+      trg_MuEG0 = 20;  trg_MuEG1 = 10; trg_MuEG_eff  = 0.95; 
     }
     bool passTrigger[6] = {false, false, false, false, false, false};
     if     (type == SmurfTree::mm){
@@ -340,7 +360,7 @@
 ********SPIN*************
 export theDir=117;
 rm -rf /data/smurf/ceballos/inputLimits/ana_Moriond13_2D/${theDir}
-mkdir  /data/smurf/ceballos/inputLimits/ana_Moriond13_2D/${theDir}
+mkdir -p /data/smurf/ceballos/inputLimits/ana_Moriond13_2D/${theDir}
 mv /home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/output/histo_limits_ntuples2012_MultiClass_125train_0jets_0j_chan6_mh125_spin_8TeV.txt /data/smurf/ceballos/inputLimits/ana_Moriond13_2D/${theDir}/hwwof_0j_8TeV.txt
 mv /home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/output/histo_limits_ntuples2012_MultiClass_125train_1jets_1j_chan6_mh125_spin_8TeV.txt /data/smurf/ceballos/inputLimits/ana_Moriond13_2D/${theDir}/hwwof_1j_8TeV.txt
 mv /home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/output/histo_limits_ntuples_126train_0jets_0j_chan6_mh126_spin_7TeV.txt                /data/smurf/ceballos/inputLimits/ana_Moriond13_2D/${theDir}/hwwof_0j_7TeV.txt

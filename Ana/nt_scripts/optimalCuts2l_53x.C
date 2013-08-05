@@ -1,7 +1,7 @@
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/SmurfTree.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/factors.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Core/LeptonScaleLookup.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Ana/nt_scripts/trilepton.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/SmurfTree.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/factors.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Core/LeptonScaleLookup.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Ana/nt_scripts/trilepton.h"
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -15,10 +15,10 @@
 #include "TMath.h"
 #include "TCanvas.h"
 #include "TSystem.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/HiggsQCDScaleSystematics_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/PSUESystematics_8TeV.h"
-#include "/home/ceballos/releases/CMSSW_5_2_3_patch3/src/Smurf/Analysis/HWWlvlv/PDFgHHSystematics_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/OtherBkgScaleFactors_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/HiggsQCDScaleSystematics_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/PSUESystematics_8TeV.h"
+#include "/home/ceballos/releases/CMSSW_5_2_8/src/Smurf/Analysis/HWWlvlv/PDFgHHSystematics_8TeV.h"
 
 const int verboseLevel =   1;
 bool UseDyttDataDriven = true; // if true, then remove em events in dyll MC
@@ -148,6 +148,7 @@ void optimalCuts2l_53x
   const int channel = mH;
   if     (channel > 1000 && channel < 2000) mH = channel-1000;
   else if(channel == 300                  ) mH = channel;
+  else if(channel == 301                  ) mH = channel;
   else assert(0);
 
   Float_t bdtg = 0.0;
@@ -390,7 +391,7 @@ void optimalCuts2l_53x
     if (i%100000 == 0 && verboseLevel > 0)
       printf("--- reading event %5d of %5d\n",i,nBgd);
     bgdEvent.tree_->GetEntry(i);
-    if(channel != 300){
+    if(channel != 300 && channel != 301){
       bgdEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww"       ,(int)125), &bdtg);
       bgdEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux0"  ,(int)125), &bdtg_aux0);
       bgdEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux1"  ,(int)125), &bdtg_aux1);
@@ -468,6 +469,8 @@ void optimalCuts2l_53x
     bool isRealLepton = false;
     if((TMath::Abs(bgdEvent.lep1McId_) == 11 || TMath::Abs(bgdEvent.lep1McId_) == 13) &&
        (TMath::Abs(bgdEvent.lep2McId_) == 11 || TMath::Abs(bgdEvent.lep2McId_) == 13)) isRealLepton = true;
+    double HTMiss = (bgdEvent.lep1_+bgdEvent.lep2_+bgdEvent.jet1_+bgdEvent.jet2_+bgdEvent.jet3_+bgdEvent.jet4_).Pt();
+    double LD = bgdEvent.met_ * 0.00397 + HTMiss * 0.00265;
 
     if     (channel > 1000 && channel < 2000){ // HW->2l selection
       if(
@@ -520,6 +523,31 @@ void optimalCuts2l_53x
 	    bgdEvent.dstype_ == SmurfTree::wgstar || bgdEvent.dstype_ == SmurfTree::dytt || bgdEvent.dstype_ == SmurfTree::www)) passCuts = false;
       }
     } // WW->2l selection
+    else if(channel == 301){ // ttH selection
+      int nBtag[3] = {0, 0, 0};
+      if(bgdEvent.jet1Btag_     > 2.100) nBtag[0]++; if(bgdEvent.jet2Btag_     > 2.100) nBtag[0]++; if(bgdEvent.jet3Btag_     > 2.100) nBtag[0]++; if(bgdEvent.jet4Btag_     > 2.100) nBtag[0]++;
+      if(bgdEvent.jet1ProbBtag_ > 0.244) nBtag[1]++; if(bgdEvent.jet2ProbBtag_ > 0.244) nBtag[1]++; if(bgdEvent.jet3ProbBtag_ > 0.244) nBtag[1]++; if(bgdEvent.jet4ProbBtag_ > 0.244) nBtag[1]++;
+      if(bgdEvent.jet1ProbBtag_ > 0.679) nBtag[2]++; if(bgdEvent.jet2ProbBtag_ > 0.679) nBtag[2]++; if(bgdEvent.jet3ProbBtag_ > 0.679) nBtag[2]++; if(bgdEvent.jet4ProbBtag_ > 0.679) nBtag[2]++;
+      if(
+         bgdEvent.dilep_.M() > 12 &&
+        (bgdEvent.cuts_ & SmurfTree::ExtraLeptonVeto) == SmurfTree::ExtraLeptonVeto &&
+         charge != 0 &&
+         bgdEvent.lep1_.Pt() > 20. &&
+         bgdEvent.lep2_.Pt() > 20. &&
+	 bgdEvent.jet4_.Pt() > 25. && LD > 0.2 && (nBtag[1] >= 2 && nBtag[2] >= 1) &&
+	 bgdEvent.lep1_.Pt()+bgdEvent.lep2_.Pt()+bgdEvent.met_ > 100.0 &&
+         (fabs(bgdEvent.dilep_.M()-91.1876) > 10. || bgdEvent.type_ != SmurfTree::ee) && 
+	 (bgdEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (bgdEvent.type_ == SmurfTree::mm || bgdEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (bgdEvent.type_ == SmurfTree::em || bgdEvent.type_ == SmurfTree::me))) &&
+	 1 == 1
+	){
+	
+	passCuts = true;
+	if(isRealLepton == false &&
+	   (bgdEvent.dstype_ == SmurfTree::ttbar  || bgdEvent.dstype_ == SmurfTree::tw   || bgdEvent.dstype_ == SmurfTree::dyee || bgdEvent.dstype_ == SmurfTree::dymm ||
+	    bgdEvent.dstype_ == SmurfTree::qqww   || bgdEvent.dstype_ == SmurfTree::ggww || bgdEvent.dstype_ == SmurfTree::wz   || bgdEvent.dstype_ == SmurfTree::zz   ||
+	    bgdEvent.dstype_ == SmurfTree::wgstar || bgdEvent.dstype_ == SmurfTree::dytt || bgdEvent.dstype_ == SmurfTree::www)) passCuts = false;
+      }
+    } // ttH selection
 
     if(passCuts == true){
       double theWeight = 0.0;
@@ -654,7 +682,7 @@ void optimalCuts2l_53x
       else if(thePlot ==16) myVar = bgdEvent.lep2_.Pt()/bgdEvent.lep1_.Pt();
       else if(thePlot ==17) myVar = bgdEvent.njets_;
       else if(thePlot ==18) myVar = bgdEvent.nvtx_;
-      else if(thePlot ==19) myVar = bgdEvent.pTrackMet_;
+      else if(thePlot ==19) myVar = HTMiss;
       else if(thePlot ==20) myVar = bgdEvent.dPhi_*180.0/TMath::Pi();
       else if(thePlot ==21) myVar = TMath::Min(bgdEvent.dPhiLep1MET_,bgdEvent.dPhiLep2MET_)*180.0/TMath::Pi();
       else if(thePlot ==22) myVar = deltaPhiQQL[2]*180.0/TMath::Pi();
@@ -861,7 +889,7 @@ void optimalCuts2l_53x
     if (i%100000 == 0 && verboseLevel > 0)
       printf("--- reading event %5d of %5d\n",i,nSyst);
     systEvent.tree_->GetEntry(i);
-    if(channel != 300){
+    if(channel != 300 && channel != 301){
       systEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww"       ,(int)125), &bdtg);
       systEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux0"  ,(int)125), &bdtg_aux0);
       systEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux1"  ,(int)125), &bdtg_aux1);
@@ -938,6 +966,8 @@ void optimalCuts2l_53x
     bool isRealLepton = false;
     if((TMath::Abs(systEvent.lep1McId_) == 11 || TMath::Abs(systEvent.lep1McId_) == 13) &&
        (TMath::Abs(systEvent.lep2McId_) == 11 || TMath::Abs(systEvent.lep2McId_) == 13)) isRealLepton = true;
+    double HTMiss = (systEvent.lep1_+systEvent.lep2_+systEvent.jet1_+systEvent.jet2_+systEvent.jet3_+systEvent.jet4_).Pt();
+    double LD = systEvent.met_ * 0.00397 + HTMiss * 0.00265;
 
     if(channel > 1000 && channel < 2000){ // HW->2l selection
       if(
@@ -964,7 +994,7 @@ void optimalCuts2l_53x
 	    systEvent.dstype_ == SmurfTree::wgstar || systEvent.dstype_ == SmurfTree::dytt || systEvent.dstype_ == SmurfTree::www)) passCuts = false;
       }
     } // HW->2l selection
-    else if(channel == 300){ // WW->2l selection
+    else if(channel == 300 && channel != 301){ // WW->2l selection
       if(
          systEvent.dilep_.M() > 12 &&
         (systEvent.cuts_ & SmurfTree::ExtraLeptonVeto) == SmurfTree::ExtraLeptonVeto &&
@@ -982,7 +1012,6 @@ void optimalCuts2l_53x
 	 (systEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (systEvent.type_ == SmurfTree::mm || systEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (systEvent.type_ == SmurfTree::em || systEvent.type_ == SmurfTree::me))) &&
 	 1 == 1
 	){
-	
 	passCuts = true;
 	if(isRealLepton == false &&
 	   (systEvent.dstype_ == SmurfTree::ttbar  || systEvent.dstype_ == SmurfTree::tw   || systEvent.dstype_ == SmurfTree::dyee || systEvent.dstype_ == SmurfTree::dymm ||
@@ -990,6 +1019,30 @@ void optimalCuts2l_53x
 	    systEvent.dstype_ == SmurfTree::wgstar || systEvent.dstype_ == SmurfTree::dytt || systEvent.dstype_ == SmurfTree::www)) passCuts = false;
       }
     } // WW->2l selection
+    else if(channel == 301){ // ttH selection
+      int nBtag[3] = {0, 0, 0};
+      if(systEvent.jet1Btag_     > 2.100) nBtag[0]++; if(systEvent.jet2Btag_     > 2.100) nBtag[0]++; if(systEvent.jet3Btag_     > 2.100) nBtag[0]++; if(systEvent.jet4Btag_     > 2.100) nBtag[0]++;
+      if(systEvent.jet1ProbBtag_ > 0.244) nBtag[1]++; if(systEvent.jet2ProbBtag_ > 0.244) nBtag[1]++; if(systEvent.jet3ProbBtag_ > 0.244) nBtag[1]++; if(systEvent.jet4ProbBtag_ > 0.244) nBtag[1]++;
+      if(systEvent.jet1ProbBtag_ > 0.679) nBtag[2]++; if(systEvent.jet2ProbBtag_ > 0.679) nBtag[2]++; if(systEvent.jet3ProbBtag_ > 0.679) nBtag[2]++; if(systEvent.jet4ProbBtag_ > 0.679) nBtag[2]++;
+      if(
+         systEvent.dilep_.M() > 12 &&
+        (systEvent.cuts_ & SmurfTree::ExtraLeptonVeto) == SmurfTree::ExtraLeptonVeto &&
+         charge != 0 &&
+         systEvent.lep1_.Pt() > 20. &&
+         systEvent.lep2_.Pt() > 20. &&
+	 systEvent.jet4_.Pt() > 25. && LD > 0.2 && (nBtag[1] >= 2 && nBtag[2] >= 1) &&
+	 systEvent.lep1_.Pt()+systEvent.lep2_.Pt()+systEvent.met_ > 100.0 &&
+         (fabs(systEvent.dilep_.M()-91.1876) > 10. || systEvent.type_ != SmurfTree::ee) && 
+	 (systEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (systEvent.type_ == SmurfTree::mm || systEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (systEvent.type_ == SmurfTree::em || systEvent.type_ == SmurfTree::me))) &&
+	 1 == 1
+	){
+	passCuts = true;
+	if(isRealLepton == false &&
+	   (systEvent.dstype_ == SmurfTree::ttbar  || systEvent.dstype_ == SmurfTree::tw   || systEvent.dstype_ == SmurfTree::dyee || systEvent.dstype_ == SmurfTree::dymm ||
+	    systEvent.dstype_ == SmurfTree::qqww   || systEvent.dstype_ == SmurfTree::ggww || systEvent.dstype_ == SmurfTree::wz   || systEvent.dstype_ == SmurfTree::zz   ||
+	    systEvent.dstype_ == SmurfTree::wgstar || systEvent.dstype_ == SmurfTree::dytt || systEvent.dstype_ == SmurfTree::www)) passCuts = false;
+      }
+    } // ttH selection
 
     if(passCuts == true){
       double theWeight = 0.0;
@@ -1150,7 +1203,7 @@ void optimalCuts2l_53x
     if (i%100000 == 0 && verboseLevel > 0)
        printf("--- reading Signal event %5d of %5d\n",i,nSig);
     sigEvent.tree_->GetEntry(i);
-    if(channel != 300){
+    if(channel != 300 && channel != 301){
       sigEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww"     ,(int)125), &bdtg);
       sigEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux0"  ,(int)125), &bdtg_aux0);
       sigEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux1"  ,(int)125), &bdtg_aux1);
@@ -1194,6 +1247,8 @@ void optimalCuts2l_53x
     bool isRealLepton = false;
     if((TMath::Abs(sigEvent.lep1McId_) == 11 || TMath::Abs(sigEvent.lep1McId_) == 13) &&
        (TMath::Abs(sigEvent.lep2McId_) == 11 || TMath::Abs(sigEvent.lep2McId_) == 13)) isRealLepton = true;
+    double HTMiss = (sigEvent.lep1_+sigEvent.lep2_+sigEvent.jet1_+sigEvent.jet2_+sigEvent.jet3_+sigEvent.jet4_).Pt();
+    double LD = sigEvent.met_ * 0.00397 + HTMiss * 0.00265;
 
     if(channel > 1000 && channel < 2000){ // HW->2l selection
       if(
@@ -1242,6 +1297,28 @@ void optimalCuts2l_53x
         //if(sigEvent.processId_ == 10001 || sigEvent.processId_ == 10010) {passCuts = false; isSignalDecay = false;}
       }
     } // WW->2l selection
+    else if(channel == 301){ // ttH selection
+      int nBtag[3] = {0, 0, 0};
+      if(sigEvent.jet1Btag_     > 2.100) nBtag[0]++; if(sigEvent.jet2Btag_     > 2.100) nBtag[0]++; if(sigEvent.jet3Btag_     > 2.100) nBtag[0]++; if(sigEvent.jet4Btag_     > 2.100) nBtag[0]++;
+      if(sigEvent.jet1ProbBtag_ > 0.244) nBtag[1]++; if(sigEvent.jet2ProbBtag_ > 0.244) nBtag[1]++; if(sigEvent.jet3ProbBtag_ > 0.244) nBtag[1]++; if(sigEvent.jet4ProbBtag_ > 0.244) nBtag[1]++;
+      if(sigEvent.jet1ProbBtag_ > 0.679) nBtag[2]++; if(sigEvent.jet2ProbBtag_ > 0.679) nBtag[2]++; if(sigEvent.jet3ProbBtag_ > 0.679) nBtag[2]++; if(sigEvent.jet4ProbBtag_ > 0.679) nBtag[2]++;
+      if(
+         sigEvent.dilep_.M() > 12 &&
+        (sigEvent.cuts_ & SmurfTree::ExtraLeptonVeto) == SmurfTree::ExtraLeptonVeto &&
+         charge != 0 &&
+         sigEvent.lep1_.Pt() > 20. &&
+         sigEvent.lep2_.Pt() > 20. &&
+	 sigEvent.jet4_.Pt() > 25. && LD > 0.2 && (nBtag[1] >= 2 && nBtag[2] >= 1) &&
+	 sigEvent.lep1_.Pt()+sigEvent.lep2_.Pt()+sigEvent.met_ > 100.0 &&
+         (fabs(sigEvent.dilep_.M()-91.1876) > 10. || sigEvent.type_ != SmurfTree::ee) && 
+	 (sigEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (sigEvent.type_ == SmurfTree::mm || sigEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (sigEvent.type_ == SmurfTree::em || sigEvent.type_ == SmurfTree::me))) &&
+	 1 == 1
+	){
+        passCuts = true;
+        isSignalDecay = true;
+        if(isRealLepton == false) {passCuts = false; isSignalDecay = false;}
+      }
+    } // ttH selection
 
     if(passCuts == true){
       double add = 1.;
@@ -1281,7 +1358,7 @@ void optimalCuts2l_53x
       else if(thePlot ==16) myVar = sigEvent.lep2_.Pt()/sigEvent.lep1_.Pt();
       else if(thePlot ==17) myVar = sigEvent.njets_;
       else if(thePlot ==18) myVar = sigEvent.nvtx_;
-      else if(thePlot ==19) myVar = sigEvent.pTrackMet_;
+      else if(thePlot ==19) myVar = HTMiss;
       else if(thePlot ==20) myVar = sigEvent.dPhi_*180.0/TMath::Pi();
       else if(thePlot ==21) myVar = TMath::Min(sigEvent.dPhiLep1MET_,sigEvent.dPhiLep2MET_)*180.0/TMath::Pi();
       else if(thePlot ==22) myVar = deltaPhiQQL[2]*180.0/TMath::Pi();
@@ -1400,7 +1477,7 @@ void optimalCuts2l_53x
     if (i%100000 == 0 && verboseLevel > 0)
       printf("--- reading event %5d of %5d\n",i,nData);
     dataEvent.tree_->GetEntry(i);
-    if(channel != 300){
+    if(channel != 300 && channel != 301){
       dataEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww"      ,(int)125), &bdtg);
       dataEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux0"  ,(int)125), &bdtg_aux0);
       dataEvent.tree_->SetBranchAddress(Form("bdtg_hww%i_999jet_ww_aux1"  ,(int)125), &bdtg_aux1);
@@ -1439,12 +1516,14 @@ void optimalCuts2l_53x
     if(dataEvent.njets_ >= 2) dPhiDiLepJetCut = DeltaPhi((dataEvent.jet1_+dataEvent.jet2_).Phi(),dataEvent.dilep_.Phi())*180.0/TMath::Pi() < 165. ||
                                                          dataEvent.type_ == SmurfTree::em || dataEvent.type_ == SmurfTree::me;
     if((channel > 1000 && channel < 2000) || channel == 300) {passMET = usedMet > 30.; if(dataEvent.type_ == SmurfTree::ee) passMET = usedMet > 50.;}
-
     int centrality = 0;
     if(((dataEvent.jet1_.Eta()-dataEvent.lep1_.Eta() > 0 && dataEvent.jet2_.Eta()-dataEvent.lep1_.Eta() < 0) ||
         (dataEvent.jet2_.Eta()-dataEvent.lep1_.Eta() > 0 && dataEvent.jet1_.Eta()-dataEvent.lep1_.Eta() < 0)) &&
        ((dataEvent.jet1_.Eta()-dataEvent.lep2_.Eta() > 0 && dataEvent.jet2_.Eta()-dataEvent.lep2_.Eta() < 0) ||
         (dataEvent.jet2_.Eta()-dataEvent.lep2_.Eta() > 0 && dataEvent.jet1_.Eta()-dataEvent.lep2_.Eta() < 0))) centrality = 1; 
+    double HTMiss = (dataEvent.lep1_+dataEvent.lep2_+dataEvent.jet1_+dataEvent.jet2_+dataEvent.jet3_+dataEvent.jet4_).Pt();
+    double LD = dataEvent.met_ * 0.00397 + HTMiss * 0.00265;
+
     bool passCuts = false;
     if(channel > 1000 && channel < 2000){ // HW->2l selection
       if(
@@ -1487,6 +1566,27 @@ void optimalCuts2l_53x
         passCuts = true;
       }
     } // WW->2l selection
+    else if(channel == 301){ // ttH selection
+      int nBtag[3] = {0, 0, 0};
+      if(dataEvent.jet1Btag_     > 2.100) nBtag[0]++; if(dataEvent.jet2Btag_     > 2.100) nBtag[0]++; if(dataEvent.jet3Btag_     > 2.100) nBtag[0]++; if(dataEvent.jet4Btag_     > 2.100) nBtag[0]++;
+      if(dataEvent.jet1ProbBtag_ > 0.244) nBtag[1]++; if(dataEvent.jet2ProbBtag_ > 0.244) nBtag[1]++; if(dataEvent.jet3ProbBtag_ > 0.244) nBtag[1]++; if(dataEvent.jet4ProbBtag_ > 0.244) nBtag[1]++;
+      if(dataEvent.jet1ProbBtag_ > 0.679) nBtag[2]++; if(dataEvent.jet2ProbBtag_ > 0.679) nBtag[2]++; if(dataEvent.jet3ProbBtag_ > 0.679) nBtag[2]++; if(dataEvent.jet4ProbBtag_ > 0.679) nBtag[2]++;
+      if(
+         dataEvent.dilep_.M() > 12 &&
+        (dataEvent.cuts_ & SmurfTree::ExtraLeptonVeto) == SmurfTree::ExtraLeptonVeto &&
+         charge != 0 &&
+         dataEvent.lep1_.Pt() > 20. &&
+         dataEvent.lep2_.Pt() > 20. &&
+	 dataEvent.jet4_.Pt() > 25. && LD > 0.2 && (nBtag[1] >= 2 && nBtag[2] >= 1) &&
+	 dataEvent.lep1_.Pt()+dataEvent.lep2_.Pt()+dataEvent.met_ > 100.0 &&
+         (fabs(dataEvent.dilep_.M()-91.1876) > 10. || dataEvent.type_ != SmurfTree::ee) && 
+	 (dataEvent.type_ == lDecay || lDecay == 4 || (lDecay == 5 && (dataEvent.type_ == SmurfTree::mm || dataEvent.type_ == SmurfTree::ee)) || (lDecay == 6 && (dataEvent.type_ == SmurfTree::em || dataEvent.type_ == SmurfTree::me))) &&
+	 1 == 1
+	){
+	
+	passCuts = true;
+      }
+    } // ttH selection
 
     if(passCuts == true){
       double myVar = dataEvent.met_;
@@ -1507,7 +1607,7 @@ void optimalCuts2l_53x
       else if(thePlot ==16) myVar = dataEvent.lep2_.Pt()/dataEvent.lep1_.Pt();
       else if(thePlot ==17) myVar = dataEvent.njets_;
       else if(thePlot ==18) myVar = dataEvent.nvtx_;
-      else if(thePlot ==19) myVar = dataEvent.pTrackMet_;
+      else if(thePlot ==19) myVar = HTMiss;
       else if(thePlot ==20) myVar = dataEvent.dPhi_*180.0/TMath::Pi();
       else if(thePlot ==21) myVar = TMath::Min(dataEvent.dPhiLep1MET_,dataEvent.dPhiLep2MET_)*180.0/TMath::Pi();
       else if(thePlot ==22) myVar = deltaPhiQQL[2]*180.0/TMath::Pi();
@@ -1735,7 +1835,7 @@ void optimalCuts2l_53x
     }
     histo_WjetsM_CMS_MVAWMBoundingDown->Scale(histo_WjetsM->GetSumOfWeights()/histo_WjetsM_CMS_MVAWMBoundingDown->GetSumOfWeights());
 
-    printf("nuisance WZ/Wg: %f %f\n",histo_WZ_CMS_WZNLOBoundingUp->GetSumOfWeights(),histo_Wgamma->GetSumOfWeights());
+    if(histo_WZ_CMS_WZNLOBoundingUp->GetSumOfWeights()>0) printf("nuisance WZ/Wg: %f %f\n",histo_WZ_CMS_WZNLOBoundingUp->GetSumOfWeights(),histo_Wgamma->GetSumOfWeights());
     histo_WZ_CMS_WZNLOBoundingUp->Scale(histo_WZ->GetSumOfWeights()/histo_WZ_CMS_WZNLOBoundingUp->GetSumOfWeights());
     for(int i=1; i<=histo_ttH_CMS_MVAMETResBoundingUp->GetNbinsX(); i++){
       mean = histo_ttH  		          ->GetBinContent(i);
