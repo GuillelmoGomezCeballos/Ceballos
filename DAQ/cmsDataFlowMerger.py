@@ -10,8 +10,8 @@ import socket
 import filecmp
 
 # trivial examples
-# ./cmsDataFlowMerger.py --paths_to_watch="/tmp/ceballos/tmp.wa3C5jzSsF/data/run000100" --path_eol="/tmp/ceballos/tmp.wa3C5jzSsF/data" --outputMerge=mergeBU --outputEndName=HOST --typeMerging=mini --debug=50
-# ./cmsDataFlowMerger.py --paths_to_watch="mergeBU/run000100"  --outputMerge=mergeMacro --outputEndName=HOST --typeMerging=macro --debug=50
+# ./cmsDataFlowMerger.py --paths_to_watch="/ramdisk/output/run100588" --path_eol="/ramdisk/" --outputMerge=/beast_storage/mergeBU --outputEndName=$HOSTNAME --typeMerging=mini  --doRemoveFiles --debug=10
+# ./cmsDataFlowMerger.py --paths_to_watch="/store/sata31a02v01/mergeBU/run100588"    --outputMerge=/store/sata31a02v01/mergeMacro --outputEndName=$HOSTNAME --typeMerging=macro --doRemoveFiles --debug=10
 
 # program to merge (cat) files given a list
 
