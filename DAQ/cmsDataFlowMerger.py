@@ -4,6 +4,8 @@ import shutil
 import json
 import glob
 import multiprocessing
+from multiprocessing.pool import ThreadPool
+import threading
 import datetime
 import fileinput
 import socket
@@ -41,15 +43,16 @@ def mergeFiles(outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder
       if os.path.exists(iniNameFullPath):
          filenames = [iniNameFullPath]
          with open(outMergedFileFullPath, 'w') as fout:
-            for line in fileinput.input(filenames):
+            for line in fileinput.FileInput(filenames):
                fout.write(line)
       else:
          print "BIG PROBLEM, ini file not found!: ",iniNameFullPath
 
    filenames = [inputDataFolder + "/" + word_in_list for word_in_list in files]
    with open(outMergedFileFullPath, 'a') as fout:
-      for line in fileinput.input(filenames):
+      for line in fileinput.FileInput(filenames):
          fout.write(line)
+   fout.close()
    os.chmod(outMergedFileFullPath, 0666)
 
    # input events in that file, all input events, file name, output events in that files, number of merged files
@@ -95,8 +98,7 @@ def doTheRecovering():
       added = [f for f in after if not f in before]
       removed = [f for f in before if not f in after]
 
-      # loop over JSON files, which will give the list of files to be merged
-      processs = []
+      # loop over JSON files, which will give the list of files to be recovered
       for i in range(0, len(afterString)):
          if "_TEMP.jsn" in afterString[i]:
             inputJsonFile = os.path.join(inputDataFolder, afterString[i])
@@ -136,9 +138,17 @@ def doTheMerging():
    eventsEoLSDict = dict()
    nFilesBUDict   = dict() 
    if(float(debug) >= 10): print "I will watch:", paths_to_watch
+   # Maximum number with pool option
+   nWithPollMax = -1
+   # Maximum number of threads to be allowed with the pool option
+   nThreadsMax  = 50
+   # Number of loops
+   nLoops = 0
    while 1:
+      thePool = ThreadPool(nThreadsMax)
+      nLoops = nLoops + 1
       inputDataFolders = glob.glob(paths_to_watch)
-      if(float(debug) >= 10): print "***************NEW LOOP***************"
+      if(float(debug) >= 10): print "***************NEW LOOP************** ",nLoops
       if(float(debug) >= 10): print inputDataFolders
       for nf in range(0, len(inputDataFolders)):
           inputDataFolder = inputDataFolders[nf]
@@ -196,8 +206,8 @@ def doTheMerging():
 		   print "Looks like the file " + inputName + " is being copied by someone else..."
 
 	  # loop over JSON files, which will give the list of files to be merged
-	  processs = []
-          for i in range(0, len(afterString)):
+          processs = []
+	  for i in range(0, len(afterString)):
 	     if ".jsn" not in afterString[i]: continue
 	     if "index" in afterString[i]: continue
 	     if "EoLS" in afterString[i]: continue
@@ -296,8 +306,13 @@ def doTheMerging():
 	              outMergedFile = fileNameString[0] + "_" + fileNameString[1] + "_" + fileNameString[2] + "_" + outputEndName + ".dat";
 	              outMergedJSON = fileNameString[0] + "_" + fileNameString[1] + "_" + fileNameString[2] + "_" + outputEndName + ".jsn";
 
-                      process = multiprocessing.Process(target = mergeFiles, args = [outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]])
-                      process.start()
+                      if nLoops <= nWithPollMax:
+                         process = thePool.apply_async(         mergeFiles,       [outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]])
+		      else:
+		         process = threading.Thread   (target = mergeFiles,args = (outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]))
+                         process.start()
+		         #process = multiprocessing.Process(target = mergeFiles, args = [outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]])
+                         #process.start()
                    else:
                       if (float(debug) >= 5):
                 	  print "Events number does not match: EoL says", eventsEoLSDict[keyEoLS][0], "we have in the files:", eventsIDict[key][0]
@@ -319,16 +334,21 @@ def doTheMerging():
                    eventsAllEoLS = eventsTotalInput
 		   eventsEoLSDict.update({keyEoLS:[eventsEoLS,filesEoLS,eventsAllEoLS]})
 
-                   process = multiprocessing.Process(target = mergeFiles, args = [outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]])
-                   process.start()
+                   if nLoops <= nWithPollMax:
+                      process = thePool.apply_async(         mergeFiles,       [outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]])
+                   else:
+                      process = threading.Thread   (target = mergeFiles,args = (outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]))
+                      process.start()
+                      #process = multiprocessing.Process(target = mergeFiles, args = [outputMergedFolder, outMergedFile, outMergedJSON, inputDataFolder, eventsEoLSDict[keyEoLS], eventsODict[key][0], filesDict[key], jsonsDict[key]])
+                      #process.start()
                 else:
                    if (float(debug) >= 5):
                        print "Events number does not match: EoL says", eventsOutput, "we have in the files:", eventsIDict[key][0]
 
-	  #for process in processs: # then kill them all off
-          #  process.terminate()
           before = after
-
+      if nLoops <= nWithPollMax:
+         thePool.close()
+         thePool.join()
 """
 Main
 """
