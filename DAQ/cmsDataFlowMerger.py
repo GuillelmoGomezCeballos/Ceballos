@@ -202,7 +202,11 @@ def doTheMerging():
 		      if filecmp.cmp(outputName,inputNameRename) == False:
 		         msg = "ini files: %s and %s are different!!!" % (outputName,inputNameRename)
 		         raise RuntimeError, msg
-                else:
+
+                   if(doRemoveFiles == True): 
+                      os.remove(inputNameRename)
+
+		else:
 		   print "Looks like the file " + inputName + " is being copied by someone else..."
 
 	  # loop over JSON files, which will give the list of files to be merged
