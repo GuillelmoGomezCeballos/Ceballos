@@ -139,7 +139,7 @@ def doTheMerging():
    nFilesBUDict   = dict() 
    if(float(debug) >= 10): print "I will watch:", paths_to_watch
    # Maximum number with pool option
-   nWithPollMax = -1
+   nWithPollMax = 10
    # Maximum number of threads to be allowed with the pool option
    nThreadsMax  = 50
    # Number of loops
@@ -210,7 +210,6 @@ def doTheMerging():
 		   print "Looks like the file " + inputName + " is being copied by someone else..."
 
 	  # loop over JSON files, which will give the list of files to be merged
-          processs = []
 	  for i in range(0, len(afterString)):
 	     if ".jsn" not in afterString[i]: continue
 	     if "index" in afterString[i]: continue
